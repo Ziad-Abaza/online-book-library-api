@@ -253,4 +253,3 @@ The controller uses `try-catch` blocks to handle exceptions during file uploads,
 
  to create book.'], 500);
    }
-   ```
