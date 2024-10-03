@@ -1,5 +1,4 @@
 
-```markdown
 # Library Management System API
 
 This project provides a RESTful API for managing a digital library system. The system allows users to manage books, categories, roles, users, comments, and downloads.
