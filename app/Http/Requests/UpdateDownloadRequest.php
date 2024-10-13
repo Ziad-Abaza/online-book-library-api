@@ -17,13 +17,13 @@ class UpdateDownloadRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, mixed>
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
-            'user_id' => 'sometimes|required|exists:users,id',
-            'book_id' => 'sometimes|required|exists:books,id',
+            'book_id' => 'sometimes|required|exists:books,id', 
+            'user_id' => 'sometimes|required|exists:users,id', 
         ];
     }
 }

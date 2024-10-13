@@ -11,21 +11,23 @@ class UpdateUserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return false; 
     }
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
-         return [
-            'name' => 'required|string|max:250',
-            'email' => 'required|string|email:rfc,dns|max:250|unique:users,email,'.$this->user->id,
+        return [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $this->user->id,
             'password' => 'nullable|string|min:8|confirmed',
-            'roles' => 'required'
+            'image' => 'nullable',
+            'token' => 'nullable|string',
+            'token_expiration' => 'nullable|date',
+            'is_active' => 'boolean',
+            'suspend' => 'boolean',
         ];
     }
 }

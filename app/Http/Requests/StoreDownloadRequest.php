@@ -17,13 +17,13 @@ class StoreDownloadRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, mixed>
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
+             'book_id' => 'required|exists:books,id', 
             'user_id' => 'required|exists:users,id',
-            'book_id' => 'required|exists:books,id',
         ];
     }
 }

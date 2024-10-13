@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateRoleRequest extends FormRequest
+class UpdateBookRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -19,19 +19,24 @@ class UpdateRoleRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'title' => 'sometimes|required|string|max:255',
-            'author' => 'sometimes|required|string|max:255',
-            'publish' => 'sometimes|required|string|max:255',
-            'file'=> 'sometimes|required',
-            'cover_image' => 'sometimes|required',
-            'size' => 'sometimes|nullable|max:50',
-            'number_pages' => 'sometimes|nullable|integer|min:1',
-            'published_at' => 'sometimes|required|date',
-            'is_downloadable' => 'sometimes|required|boolean',
+            'description' => 'sometimes|nullable|string',
+            'file' => 'sometimes|required|mimes:pdf,doc,docx',  
+            'cover_image' => 'sometimes|required|image', 
+            'size' => 'sometimes|nullable|numeric',
+            'number_pages' => 'sometimes|nullable|integer',
+            'published_at' => 'sometimes|nullable|date',
+            'is_approved' => 'sometimes|boolean',
+            'views_count' => 'sometimes|integer|min:0',
+            'downloads_count' => 'sometimes|integer|min:0',
+            'lang' => 'sometimes|nullable|string|max:10',
             'category_id' => 'sometimes|required|exists:categories,id',
+            'user_id' => 'sometimes|required|exists:users,id',
+            'author_id' => 'sometimes|required|exists:authors,id',
+            'book_series_id' => 'sometimes|nullable|exists:book_series,id',
         ];
     }
 }

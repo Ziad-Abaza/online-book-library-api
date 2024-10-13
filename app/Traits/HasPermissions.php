@@ -11,15 +11,6 @@ trait HasPermissions
     {
         $this->middleware('auth');
 
-        $permissions = $this->getDefaultPermissions($permissionClass);
-        
-        if ($permissionsCallback) {
-            $permissions = $permissionsCallback($permissions);
-        }
-
-        foreach ($permissions as $action => $permission) {
-            $this->middleware("permission:{$permission}", ['only' => [$action]]);
-        }
     }
 
     protected function getDefaultPermissions(string $permissionClass): array

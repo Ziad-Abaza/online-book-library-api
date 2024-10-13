@@ -11,19 +11,20 @@ class StoreCategoryRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false; 
+        return false;
     }
 
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, mixed>
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
-        return [
-            'name' => 'required|string|max:255|unique:categories,name',
+         return [
+            'name' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'category_group_id' => 'required|exists:category_groups,id',
         ];
     }
 }

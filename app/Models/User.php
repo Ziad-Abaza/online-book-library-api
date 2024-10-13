@@ -7,11 +7,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable,  HasRoles;
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -22,7 +21,50 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'email_verified_at',
+        'image',
+        'token',
+        'token_expiration',
+        'is_active',
     ];
+
+    public function books()
+    {
+        return $this->hasMany(Book::class);
+    }
+
+    public  function authorRequest()
+    {
+        return $this->hasMany(AuthorRequest::class);
+    }
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+
+    public function notifications()
+    {
+        return $this->belongsToMany(Notification::class)
+                    ->using(NotificationUser::class)
+                    ->withPivot('is_read', 'is_public', 'receiver_id') 
+                    ->withTimestamps();
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function downloads()
+    {
+        return $this->hasMany(Download::class);
+    }
+
+    public  function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -43,18 +85,5 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-       public function books()
-    {
-        return $this->hasMany(Book::class);
-    }
 
-    public function comments()
-    {
-        return $this->hasMany(Comment::class);
-    }
-
-    public function downloads()
-    {
-        return $this->hasMany(Download::class);
-    }
 }

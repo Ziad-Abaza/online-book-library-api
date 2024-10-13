@@ -17,13 +17,14 @@ class UpdateCommentRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, mixed>
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
-            'content' => 'required|string|max:1000',
-            'rating' => 'required|integer|min:1|max:5',
+            'content' => 'nullable|string|max:500', 
+            'rating' => 'nullable|integer|between:1,5', 
+            'book_id' => 'sometimes|required|exists:books,id', 
         ];
     }
 }

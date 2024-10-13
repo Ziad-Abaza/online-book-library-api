@@ -6,7 +6,7 @@ use App\Http\Controllers\Users\RoleController;
 use App\Http\Controllers\Users\UserController;
 
 
-// Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
@@ -27,14 +27,14 @@ use App\Http\Controllers\Users\UserController;
     |  -  Role Routes
     |------------------------------------------------------------------
      */
-    Route::prefix('roles')->group(function () {
-        Route::get('/', [RoleController::class, 'index'])->name('roles.index');
-        Route::get('/{role}', [RoleController::class, 'show'])->name('roles.show');
-        Route::post('/', [RoleController::class, 'store'])->name('roles.store');
-        Route::put('/{role}', [RoleController::class, 'update'])->name('roles.update');
-        Route::delete('/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
-    });
-// });
+    // Route::prefix('roles')->group(function () {
+    //     Route::get('/', [RoleController::class, 'index'])->name('roles.index');
+    //     Route::get('/{role}', [RoleController::class, 'show'])->name('roles.show');
+    //     Route::post('/', [RoleController::class, 'store'])->name('roles.store');
+    //     Route::put('/{role}', [RoleController::class, 'update'])->name('roles.update');
+    //     Route::delete('/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
+    // });
+});
 
 require __DIR__.'/site.php';
 require __DIR__.'/auth.php';

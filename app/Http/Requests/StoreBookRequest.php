@@ -6,24 +6,37 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreBookRequest extends FormRequest
 {
-    public function authorize()
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
     {
-        return false; 
+        return false;
     }
 
-    public function rules()
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
     {
         return [
             'title' => 'required|string|max:255',
-            'author' => 'required|string|max:255',
-            'publish' => 'required|string|max:255',
-            'file' => 'required',
-            'cover_image' => 'required',
-            'size' => 'nullable|max:50',
-            'number_pages' => 'nullable|integer|min:1',
-            'published_at' => 'required|date',
-            'is_downloadable' => 'required|boolean',
+            'description' => 'nullable|string',
+            'file' => 'required|mimes:pdf,doc,docx',  
+            'cover_image' => 'required|image',  
+            'size' => 'nullable|numeric',
+            'number_pages' => 'nullable|integer',
+            'published_at' => 'nullable|date',
+            'is_approved' => 'boolean',
+            'views_count' => 'integer|min:0',
+            'downloads_count' => 'integer|min:0',
+            'lang' => 'nullable|string',
             'category_id' => 'required|exists:categories,id',
+            'user_id' => 'required|exists:users,id',
+            'author_id' => 'required|exists:authors,id',
+            'book_series_id' => 'nullable|exists:book_series,id',
         ];
     }
 }

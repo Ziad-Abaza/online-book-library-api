@@ -3,93 +3,73 @@
 namespace App\Traits;
 
 use Illuminate\Http\Request;
-use App\Traits\CrudOperationsTrait;
 
 trait HandleFile
 {
-    use CrudOperationsTrait;
-    /*
-    |--------------------------------------------------------------------------
-    | Domain Name
-    |--------------------------------------------------------------------------
-    */
+    private $domainName = 'http://127.0.0.1:8000';
 
-    private $DomainName = 'http://127.0.0.1:8000';
-
-    /*
-    |--------------------------------------------------------------------------
-    | Upload Files Function
-    |--------------------------------------------------------------------------
-    */
-    public function UploadFiles($file, $name = null, $fileType)
+    public function uploadFile(Request $request, $inputName, $fileType, $customName = null)
     {
-        $folder = '';
-        $disk = '';
-
-        switch ($fileType) {
-            case 'image':
-                $folder = 'images';
-                $disk = 'image';
-                break;
-            case 'video':
-                $folder = 'videos';
-                $disk = 'video';
-                break;
-            default:
-                $folder = 'files';
-                $disk = 'file';
+        if (!$request->hasFile($inputName)) {
+            return $request->input($inputName);
         }
 
-        return $this->uploadFile($file, $name, $folder, $disk);
+        $file = $request->file($inputName);
+        $folder = $this->determineFolder($fileType);
+        $disk = $this->determineDisk($fileType);
+
+        return $this->processFileUpload($file, $customName, $folder, $disk);
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Upload File Function
-    |--------------------------------------------------------------------------
-    */
-    private function uploadFile($uploadedFile, $name, $folder, $disk)
+    private function processFileUpload($file, $customName, $folder, $disk)
     {
         $randomName = uniqid();
-        $fileName = ($name ?? pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME)) . '_' . $randomName;
-        $extension = $uploadedFile->getClientOriginalExtension();
+        $fileName = ($customName ?? pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '_' . $randomName;
+        $extension = $file->getClientOriginalExtension();
         $fileFullName = $fileName . '.' . $extension;
-        $domain = $this->DomainName;
-        $path = $uploadedFile->storeAs($folder, $fileFullName, $disk);
-        $fullPath = $domain . '/assets/' . $path;
-        return $fullPath;
+
+        $path = $file->storeAs($folder, $fileFullName, $disk);
+        return $this->domainName . '/assets/' . $path;
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Create File Function
-    |--------------------------------------------------------------------------
-    */
-    public function createFile(Request $request, $input, $fileName, $type)
+    public function deleteFile(string $filePath)
     {
-        if ($request->hasFile($input)) {
-            return $this->UploadFiles($request->file($input), $fileName, $type);
-        } else {
-            return $request->input($input);
+        $fileName = basename($filePath);
+        $folder = $this->determineFolderByExtension($fileName);
+        $fileFullPath = public_path("assets/{$folder}/{$fileName}");
+
+        if (file_exists($fileFullPath)) {
+            unlink($fileFullPath);
         }
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Update File Function
-    |--------------------------------------------------------------------------
-    */
-    public function updateFile(Request $request, $input, $currentPath, $fileName, $type)
+    private function determineFolder(string $fileType)
     {
-        if ($request->hasFile($input)) {
-            $this->deleteFile($currentPath);
-            return $this->UploadFiles($request->file($input), $fileName, $type);
-        } else {
-            if ($request->$input !== $currentPath) {
-                return $request->$input;
-            } else {
-                return $currentPath;
-            }
-        }
+        return match ($fileType) {
+            'image' => 'images',
+            'video' => 'videos',
+            default => 'files',
+        };
+    }
+
+    private function determineDisk(string $fileType)
+    {
+        return match ($fileType) {
+            'image' => 'image',
+            'video' => 'video',
+            default => 'file',
+        };
+    }
+
+    private function determineFolderByExtension(string $fileName)
+    {
+        $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+        return match ($extension) {
+            'jpg', 'jpeg', 'png', 'svg' => 'images',
+            'mp4' => 'videos',
+            'pdf', 'doc', 'docx', 'txt', 'xls', 'xlsx' => 'files',
+            default => 'files',
+        };
     }
 }
