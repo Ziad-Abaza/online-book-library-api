@@ -50,7 +50,7 @@ class PermissionsSeeder extends Seeder
             ['name' => 'delete-notification', 'description' => 'Delete notifications'],
             ['name' => 'view-notifications', 'description' => 'View all notifications'],
             
-            ['name' => 'download_book', 'description' => 'Download books'],
+            ['name' => 'download-book', 'description' => 'Download books'],
             ['name' => 'view-downloads', 'description' => 'View all downloads'],
         ];
 

@@ -16,12 +16,7 @@ use App\Traits\HasPermissions;
 
 class UserController extends Controller
 {
-    use HandleFile, HasPermissions;
-
-       public function __construct()
-    {
-        $this->authorizePermissions('user');
-    }
+    use HandleFile;
 
     public function index()
     {

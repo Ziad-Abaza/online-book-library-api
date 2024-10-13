@@ -38,11 +38,6 @@ class User extends Authenticatable
         return $this->hasMany(AuthorRequest::class);
     }
 
-    public function users()
-    {
-        return $this->hasMany(User::class);
-    }
-
     public function notifications()
     {
         return $this->belongsToMany(Notification::class)
