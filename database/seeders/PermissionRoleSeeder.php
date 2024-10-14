@@ -10,7 +10,7 @@ class PermissionRoleSeeder extends Seeder
 {
     public function run(): void
     {
-        $admin = Role::where('name', 'Admin')->first();
+        $admin = Role::where('name', 'SuperAdmin')->first();
         $editor = Role::where('name', 'Editor')->first();
         $user = Role::where('name', 'User')->first();
         $guest = Role::where('name', 'Guest')->first();
