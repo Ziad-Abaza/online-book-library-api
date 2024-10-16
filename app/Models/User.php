@@ -23,11 +23,16 @@ class User extends Authenticatable implements HasMedia{
         'email',
         'password',
         'email_verified_at',
-        'image',
         'token',
         'token_expiration',
         'is_active',
     ];
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('images')
+            ->singleFile(); 
+    }
 
     public function books()
     {
@@ -57,10 +62,31 @@ class User extends Authenticatable implements HasMedia{
         return $this->hasMany(Download::class);
     }
 
+    public  function bookSeries()
+    {
+        return $this->hasMany(BookSeries::class);
+    }
+
     public  function roles()
     {
         return $this->belongsToMany(Role::class);
     }
+
+    public function hasPermission($permissionName)
+    {
+        return $this->roles()->with('permissions')->get()->pluck('permissions')->flatten()->contains('name', $permissionName);
+    }
+
+    public function hasRole($roleName)
+    {
+        return $this->roles()->where('name', $roleName)->exists();
+    }
+
+    public function getRoleLevel()
+    {
+        return $this->roles()->first()->role_level ?? 1;
+    }
+
 
     /**
      * The attributes that should be hidden for serialization.

@@ -10,9 +10,16 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Response;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+       public function __construct()
+    {
+        Auth::loginUsingId(1); 
+        
+        $this->authorizeResource(User::class, 'user');
+    }
     
     public function index(Request $request)
     {

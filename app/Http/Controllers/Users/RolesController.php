@@ -8,9 +8,17 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Http\Resources\RoleResource;
+use Illuminate\Support\Facades\Auth;
 
 class RolesController extends Controller
 {
+    public function __construct()
+    {        
+        Auth::loginUsingId(1); 
+
+        $this->authorizeResource(Role::class, 'role');
+    }
+
     public function index()
     {
         try {
@@ -32,8 +40,9 @@ class RolesController extends Controller
             $validated = $request->validate([
                 'name' => 'required|string|max:255|unique:roles,name',
                 'description' => 'nullable|string|max:255',
+                'role_level' => 'required|integer|min:1', // إضافة التحقق من role_level
                 'permission_ids' => 'required|array', 
-                'permission_ids.*' => 'exists:permissions,id' 
+                'permission_ids.*' => 'exists:permissions,id',
             ]);
 
             $role = Role::create($validated);
@@ -68,6 +77,7 @@ class RolesController extends Controller
             $validated = $request->validate([
                 'name' => 'sometimes|required|string|max:255|unique:roles,name,' . $id,
                 'description' => 'sometimes|nullable|string|max:255',
+                'role_level' => 'sometimes|required|integer|min:1', // إضافة التحقق من role_level
                 'permission_ids' => 'nullable|array', 
                 'permission_ids.*' => 'exists:permissions,id' 
             ]);

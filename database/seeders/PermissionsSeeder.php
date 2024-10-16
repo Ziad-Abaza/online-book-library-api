@@ -34,11 +34,10 @@ class PermissionsSeeder extends Seeder
             ['name' => 'edit-category', 'description' => 'Edit existing categories'],
             ['name' => 'delete-category', 'description' => 'Delete categories'],
             ['name' => 'view-categories', 'description' => 'View all categories'],
-            
-            ['name' => 'create-publication_request', 'description' => 'Create publication requests'],
-            ['name' => 'edit-publication_request', 'description' => 'Edit publication requests'],
-            ['name' => 'delete-publication_request', 'description' => 'Delete publication requests'],
-            ['name' => 'view-publication_requests', 'description' => 'View all publication requests'],
+
+            ['name' => 'manage-publications', 'description' => 'Manage all publication requests'],
+
+            ['name' => 'manage-author', 'description' => 'Manage all author requests'],
             
             ['name' => 'create-comment', 'description' => 'Create comments on books'],
             ['name' => 'edit-comment', 'description' => 'Edit existing comments'],
