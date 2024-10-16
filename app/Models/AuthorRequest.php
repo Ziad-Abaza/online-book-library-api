@@ -34,5 +34,7 @@ class AuthorRequest extends Model implements HasMedia
     {
         $this->addMediaCollection('author_requests') 
             ->singleFile(); 
+        $this->addMediaCollection('copyright') 
+            ->singleFile(); 
     }
 }

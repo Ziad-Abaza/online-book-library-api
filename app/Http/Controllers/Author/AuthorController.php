@@ -29,6 +29,7 @@ class AuthorController extends Controller
                 'biography' => 'nullable|string',
                 'birthdate' => 'nullable|date',
                 'image' => 'nullable|image',
+                'copyright' => 'nullable', 
             ]);
 
             $validated['user_id'] = Auth::id();
@@ -42,11 +43,16 @@ class AuthorController extends Controller
                 $authorRequest->addMedia('http://127.0.0.1:8000/assets/images/static/person.png')->toMediaCollection('author_requests');
             }
 
+            if ($request->hasFile('copyright')) { 
+                $authorRequest->addMedia($request->file('copyright'))->toMediaCollection('copyright');
+            }
+
             return response()->json(['message' => 'Author request submitted successfully'], Response::HTTP_CREATED);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Failed to submit author request'], Response::HTTP_BAD_REQUEST);
         }
     }
+
 
     public function listRequests()
     {
@@ -77,6 +83,11 @@ class AuthorController extends Controller
                 if ($authorRequest->hasMedia('author_requests')) {
                     $media = $authorRequest->getFirstMedia('author_requests');
                     $media->copy($author, 'authors');
+                }
+
+                if ($authorRequest->hasMedia('copyright')) { 
+                    $copyrightMedia = $authorRequest->getFirstMedia('copyright');
+                    $copyrightMedia->copy($author, 'author_copyrights');
                 }
 
                 $authorRequest->delete();

@@ -31,5 +31,7 @@ class Author extends Model implements HasMedia
     {
         $this->addMediaCollection('authors') 
             ->singleFile(); 
+        $this->addMediaCollection('author_copyrights') 
+            ->singleFile(); 
     }
 }
